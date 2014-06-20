@@ -4,4 +4,8 @@ class base-system {
 		ensure => installed,
 	}
 
+	package { 'sysstat':
+		ensure => installed,
+	}
+
 }
