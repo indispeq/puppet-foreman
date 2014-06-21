@@ -1,8 +1,29 @@
-class vmwaretools::install inherits vmwaretools::packages {
+class vmwaretools::install {
+        $kernelheaders = "linux-headers-${::kernelrelease}"
+
+        #This worked on ESXi 5.1u1
+        #$toolsfile = 'VMwareTools-9.0.5-1065307.tar.gz'
+
+        #This guy is for 5.5u1
+        $toolsfile = 'VMwareTools-9.0.11-1743336.tar.gz'
+
+	package { 'build-essential':
+                ensure => present,
+        }->
+
+        package { "$kernelheaders":
+                ensure => installed,
+        }->
+
+        file {'tools tgz':
+                path => "/tmp/$toolsfile",
+                ensure => present,
+                source => "puppet:///modules/vmwaretools/$toolsfile",
+        }
 
 	exec {'Extract Files':
 		cwd => '/tmp',
-		command => "/bin/tar xvzf ${vmwaretools::packages::toolsfile}",
+		command => "/bin/tar xvzf $toolsfile}",
 		require => File['tools tgz'],
 		creates => '/tmp/vmware-tools-distrib',
 		timeout => 0,
