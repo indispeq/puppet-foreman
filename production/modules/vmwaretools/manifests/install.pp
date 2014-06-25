@@ -16,16 +16,16 @@ class vmwaretools::install {
         }->
 
         file {'tools tgz':
-                path => "/tmp/$toolsfile",
+                path => "/root/$toolsfile",
                 ensure => present,
                 source => "puppet:///modules/vmwaretools/$toolsfile",
         }
 
 	exec {'Extract Files':
 		cwd => '/tmp',
-		command => "/bin/tar xvzf $toolsfile}",
+		command => "/bin/tar xvzf $toolsfile",
 		require => File['tools tgz'],
-		creates => '/tmp/vmware-tools-distrib',
+		creates => '/root/vmware-tools-distrib',
 		timeout => 0,
 	}->
 
