@@ -19,11 +19,29 @@ class nagios::monitor {
 
         file { "/etc/$::nagios::params::nagios_service_name/htpasswd.users":
                 source => 'puppet:///modules/nagios/htpasswd.users',
+		notify => Service[$::nagios::params::nagios_service_name],
         }
+
+        file { "/etc/$::nagios::params::nagios_service_name/nagios.cfg":
+                source => 'puppet:///modules/nagios/nagios.cfg',
+		notify => Service[$::nagios::params::nagios_service_name],
+        }
+
+	###
+	#for external command check stuff
+	search User::Virtual
+        realize(System_account['www-data'])
+	
+	file {"/var/lib/$::nagios::params::nagios_service_name/rw":
+		mode => 710,
+	}
+	###
 
 	Nagios_host	<<| |>>	{ notify => [ Service[$::nagios::params::nagios_service_name], Exec['fix-permissions'] ] }
 	Nagios_hostgroup	<<| |>>	{ notify => [ Service[$::nagios::params::nagios_service_name], Exec['fix-permissions'] ] }
 	Nagios_service	<<| |>>	{ notify => [ Service[$::nagios::params::nagios_service_name], Exec['fix-permissions'] ] }
+
+
 
 }
 

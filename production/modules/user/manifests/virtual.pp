@@ -42,4 +42,16 @@ class user::virtual {
 		dotfile => ['forward'],
 		groups => ['sudo'], #pass empty array if no groups -- []
 	}
+
+	define system_account($groups) {
+		user { $name:
+                        groups => $groups,
+                }
+		
+	}
+
+	@system_account { 'www-data':
+		groups => ['nagios'],
+	}
+
 }

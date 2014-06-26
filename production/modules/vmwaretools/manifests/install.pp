@@ -19,10 +19,10 @@ class vmwaretools::install {
                 path => "/root/$toolsfile",
                 ensure => present,
                 source => "puppet:///modules/vmwaretools/$toolsfile",
-        }
+        }-> 
 
 	exec {'Extract Files':
-		cwd => '/tmp',
+		cwd => '/root',
 		command => "/bin/tar xvzf $toolsfile",
 		require => File['tools tgz'],
 		creates => '/root/vmware-tools-distrib',
@@ -31,6 +31,6 @@ class vmwaretools::install {
 
 	exec {'Run install Script':
 	        creates => '/usr/lib/vmware-tools',
-                command => "/tmp/vmware-tools-distrib/vmware-install.pl -d",
+                command => "/root/vmware-tools-distrib/vmware-install.pl -d",
 	}
 }
